@@ -13,12 +13,12 @@ export const AuthPage = () => {
           <TabView>
             <TabPanel header="Sign In">
               <div>
-                <SignInAndSignUp />
+                <SignInAndSignUp type={'login'} buttonLabel={'Sign in'} textLabel={'Don\'t have an account?'} />
               </div>
             </TabPanel>
             <TabPanel header="Sign Up">
               <div>
-                <SignInAndSignUp />
+                <SignInAndSignUp type={'signup'} buttonLabel={'Sign up'} textLabel={'Already have an account?'} />
               </div>
             </TabPanel>
 

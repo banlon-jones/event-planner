@@ -1,14 +1,22 @@
 import {useForm} from "react-hook-form";
+import {useDispatch} from "react-redux";
+import {loginUser, signUpUser} from "../../store/user/userSlice.js";
 
-export const SignInAndSignUp = ({buttonLabel, textLabel}) => {
+export const SignInAndSignUp = ({buttonLabel, textLabel, type}) => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async (data) => {
+    if (type === 'signup'){
+      dispatch(signUpUser(data));
+    }else {
+      dispatch(loginUser(data));
+    }
   }
   return (
     <>
@@ -28,10 +36,10 @@ export const SignInAndSignUp = ({buttonLabel, textLabel}) => {
         />
         {errors.email && <small className="text-red-500">Email is required</small>}
         <button type="submit"
-                className="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-700">Sign In
+                className="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-700">{buttonLabel}
         </button>
       </form>
-      <p className="text-center text-gray-500 mt-4">Don't have an account? <a href="/sign-up"
+      <p className="text-center text-gray-500 mt-4">{textLabel} <a href="/sign-up"
                                                                               className="text-blue-500">Sign Up</a></p>
 
     </>
