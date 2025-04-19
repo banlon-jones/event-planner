@@ -5,7 +5,7 @@ import {HiOutlineUserGroup} from "react-icons/hi";
 
 export const Event = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+    <div className="w-full">
       <div className="bg-white rounded-xl shadow-lg">
         <div className="p-4 space-y-2">
           <div className="flex items-center justify-between">

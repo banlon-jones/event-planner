@@ -1,9 +1,12 @@
 import {useForm} from "react-hook-form";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {loginUser, signUpUser} from "../../store/user/userSlice.js";
+import {useNavigate} from "react-router-dom";
 
 export const SignInAndSignUp = ({buttonLabel, textLabel, type}) => {
   const dispatch = useDispatch();
+  const { user, loading, error } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -14,8 +17,14 @@ export const SignInAndSignUp = ({buttonLabel, textLabel, type}) => {
   const onSubmit = async (data) => {
     if (type === 'signup'){
       dispatch(signUpUser(data));
+      if (!loading && user) {
+        navigate('/dashboard');
+      }
     }else {
       dispatch(loginUser(data));
+      if (!loading && user) {
+        navigate('/dashboard');
+      }
     }
   }
   return (
