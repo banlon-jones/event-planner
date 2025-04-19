@@ -1,8 +1,8 @@
-import {CiCalendarDate} from "react-icons/ci";
+import {CiCalendarDate, CiMapPin} from "react-icons/ci";
 import {BiSolidEdit} from "react-icons/bi";
 import {BsTrash} from "react-icons/bs";
 import {HiOutlineUserGroup} from "react-icons/hi";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addParticipant, deleteEvent} from "../../services/eventService.js";
 import {removeEvent} from "../../store/event/eventSlice.js";
 import {Dialog} from "primereact/dialog";
@@ -11,6 +11,8 @@ import {useForm} from "react-hook-form";
 
 export const Event = ({event, showBooking, showEdit, showDelete, fetchEvent}) => {
   const [visible, setVisible] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const {user} = useSelector((state) => state.user);
   const dispatch = useDispatch()
   const trashEvent = () => {
     deleteEvent(event.id)
@@ -44,8 +46,10 @@ export const Event = ({event, showBooking, showEdit, showDelete, fetchEvent}) =>
                 {showDelete &&<button onClick={trashEvent} className="px-4 py-1 hover:cursor-pointer"><BsTrash /></button> }
               </div>
             </div>
-            <h3 className="font-semibold">{event.title}</h3>
-            <p className="text-sm text-gray-600 h-10 overflow-ellipsis overflow-hidden">{event.description}</p>
+            <div className="hover:cursor-pointer" onClick={() => setShowDetails(!showDetails)}>
+              <h3 className="font-semibold">{event.title}</h3>
+              <p className="text-sm text-gray-600 h-10 overflow-ellipsis overflow-hidden">{event.description}</p>
+            </div>
             <div className="flex justify-between items-center mt-3">
               <div className="flex items-center gap-2">
                 <HiOutlineUserGroup />
@@ -71,6 +75,33 @@ export const Event = ({event, showBooking, showEdit, showDelete, fetchEvent}) =>
             >Book Now</button>
           </div>
         </form>
+      </Dialog>
+      <Dialog header={event.title} visible={showDetails} style={{ width: '80vw' }} onHide={() => {if (!showDetails) return; setShowDetails(false); }}>
+        <div>
+          {event.description}
+        </div>
+        <div className="grid md:grid-cols-1 sm:grid-cols-1 gap-4 mt-4">
+          <div className="flex gap-4">
+            <div className="flex items-center gap-2">
+              <CiCalendarDate />
+              {event.date}
+            </div>
+            <div className="flex items-center gap-2">
+              <CiCalendarDate />
+              {event.time}
+            </div>
+            <div className="flex items-center gap-2">
+              <CiMapPin />
+              {event.location}
+            </div>
+          </div>
+          { event.uid === user?.uid && <div>
+            <h3 className="font-semibold mb-4">Participants {event.capacity} / {event.participants.length}</h3>
+            <div>
+              {event.participants.length > 0 && event.participants.map((participant) => <div>{participant}</div>)}
+            </div>
+          </div>}
+        </div>
       </Dialog>
     </>
   )

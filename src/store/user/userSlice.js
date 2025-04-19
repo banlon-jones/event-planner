@@ -13,9 +13,6 @@ export const signUpUser = createAsyncThunk("user/signUp", async (userCredentials
   return response;
 });
 
-export const logOutUser = createAsyncThunk('user/logOut',async () => {
-      return await logout()
-});
 
 
 
@@ -25,6 +22,10 @@ const userSlice = createSlice({
   reducers: {
     addUser: (state, action) => {
       state.user = action.payload;
+      state.loading = false;
+    },
+    logOutUser: (state, action) => {
+      state.user = null;
       state.loading = false;
     }
   },
@@ -55,13 +56,8 @@ const userSlice = createSlice({
       state.loading = true;
     })
 
-    builder.addCase(logOutUser.fulfilled, (state, action) => {
-      state.loading = false;
-      state.user = null;
-    })
-
   }
 })
 
-export const {addUser} = userSlice.actions;
+export const {addUser, logOutUser} = userSlice.actions;
 export default userSlice.reducer;

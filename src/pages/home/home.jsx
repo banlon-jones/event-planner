@@ -4,9 +4,19 @@ import {useState} from "react";
 
 const Home = () => {
   const [events, setEvents] = useState( JSON.parse(localStorage.getItem('events')) || []);
+  const [searchPhrase, setSearchPhrase] = useState('');
   const fetchEvents = () => {
      setEvents(JSON.parse(localStorage.getItem('events')));
   }
+
+  const searchEvent = () => {
+    const evnts = JSON.parse(localStorage.getItem('events')) || [];
+    let filteredEvents = evnts.filter((event) =>
+      event.title.toLowerCase().includes(searchPhrase.toLowerCase())
+    );
+    setEvents(filteredEvents);
+  }
+
   return (
     <>
       <div>
@@ -15,8 +25,11 @@ const Home = () => {
           <p className="text-gray-600 mb-6">Find and book tickets for the best events happening in your city.</p>
           <div className="flex flex-col md:flex-row justify-center gap-4 max-w-2xl mx-auto">
             <input type="text" placeholder="Search events..."
+                   value={searchPhrase}
+                   onChange={(e) => setSearchPhrase(e.target.value)}
                    className="w-full md:w-1/2 px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
             <button
+              onClick={searchEvent}
               className="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-700 flex items-center justify-center">
               Search
             </button>
