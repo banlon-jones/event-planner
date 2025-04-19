@@ -17,12 +17,12 @@ export const SignInAndSignUp = ({buttonLabel, textLabel, type}) => {
   const onSubmit = async (data) => {
     if (type === 'signup'){
       dispatch(signUpUser(data));
-      if (!loading && user) {
+      if (!loading && user !== null) {
         navigate('/dashboard');
       }
     }else {
       dispatch(loginUser(data));
-      if (!loading && user) {
+      if (!loading && user !== null) {
         navigate('/dashboard');
       }
     }

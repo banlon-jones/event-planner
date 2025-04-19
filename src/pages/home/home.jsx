@@ -1,7 +1,12 @@
 import {Event} from "../../components/event/event.jsx";
 import {Link} from "react-router-dom";
+import {useState} from "react";
 
 const Home = () => {
+  const [events, setEvents] = useState( JSON.parse(localStorage.getItem('events')) || []);
+  const fetchEvents = () => {
+     setEvents(JSON.parse(localStorage.getItem('events')));
+  }
   return (
     <>
       <div>
@@ -20,7 +25,15 @@ const Home = () => {
       </div>
 
       <section className="max-w-6xl mx-auto px-6 py-5">
-        <Event />
+        {events && <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map((event) => (
+            <Event key={event.id} event={event} showBooking={true} showEdit={false} showDelete={false} fetchEvent={fetchEvents} />
+          ))}
+        </div>
+        }
+        {
+          events.length === 0 && <p className="text-center">No events found</p>
+        }
       </section>
 
       <section className="bg-blue-500 text-white py-14 mt-10">

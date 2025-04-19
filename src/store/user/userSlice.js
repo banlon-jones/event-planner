@@ -1,9 +1,10 @@
-import {logout, signIn, signUp} from "../../services/authService.js";
+import {getCurrentUser, logout, signIn, signUp} from "../../services/authService.js";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 // thunk functiom
 export const loginUser = createAsyncThunk("user/signIn", async (userCredentials) => {
   const response = await signIn(userCredentials.email, userCredentials.password)
+  console.log(response)
   return response;
 });
 
@@ -16,16 +17,24 @@ export const logOutUser = createAsyncThunk('user/logOut',async () => {
       return await logout()
 });
 
+
+
 const userSlice = createSlice({
   name: "user",
-  initialState: {loading: false, user:{}, error: null},
+  initialState: {loading: false, user:null, error: null},
+  reducers: {
+    addUser: (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(loginUser.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
+      state.user = action.payload.user;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
@@ -39,7 +48,7 @@ const userSlice = createSlice({
 
     builder.addCase(signUpUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
+      state.user = action.payload.user;
     })
 
     builder.addCase(signUpUser.pending, (state, action) => {
@@ -50,7 +59,9 @@ const userSlice = createSlice({
       state.loading = false;
       state.user = null;
     })
+
   }
 })
 
+export const {addUser} = userSlice.actions;
 export default userSlice.reducer;
