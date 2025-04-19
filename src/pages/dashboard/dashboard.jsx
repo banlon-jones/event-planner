@@ -45,7 +45,7 @@ const Dashboard = () => {
         }
       </div>
 
-      <Dialog header="Event" visible={visible} style={{ width: '50vw' }} onHide={() => {if (!visible) return; setVisible(false); }}>
+      <Dialog header="Create Event" visible={visible} style={{ width: '50vw' }} onHide={() => {if (!visible) return; setVisible(false); }}>
         <CreateAndEditEvent onHide={hideModal}/>
       </Dialog>
     </>

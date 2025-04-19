@@ -1,9 +1,9 @@
 import {useForm} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
-import {newEvent} from "../../services/eventService.js";
-import {addEvent} from "../../store/event/eventSlice.js";
+import { editMyEvent, newEvent} from "../../services/eventService.js";
+import {addEvent, editEvent} from "../../store/event/eventSlice.js";
 
-export const CreateAndEditEvent = ({onHide}) => {
+export const CreateAndEditEvent = ({onHide, selectedEvent}) => {
   const dispatch = useDispatch()
   const categories = [
     { name: "Conference" },
@@ -19,14 +19,25 @@ export const CreateAndEditEvent = ({onHide}) => {
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm();
+  } = useForm({
+    defaultValues: selectedEvent || {}
+  });
 
   const onSubmit = async (data) => {
-    const event = {...data, uid: user.uid, id: Date.now(), participants: []}
-    newEvent(event);
-    dispatch(addEvent(event));
-    reset();
-    onHide(false);
+    if (!selectedEvent){
+      const event = {...data, uid: user.uid, id: Date.now(), participants: []}
+      newEvent(event);
+      dispatch(addEvent(event));
+      reset();
+      onHide(false);
+    }else {
+      const event = {...selectedEvent, ...data}
+      editMyEvent(event)
+      dispatch(editEvent(event));
+      reset();
+      onHide(false);
+    }
+
   }
 
 

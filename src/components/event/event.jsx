@@ -8,10 +8,12 @@ import {removeEvent} from "../../store/event/eventSlice.js";
 import {Dialog} from "primereact/dialog";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
+import {CreateAndEditEvent} from "../createAndEditEvent/createAndEditEvent.jsx";
 
 export const Event = ({event, showBooking, showEdit, showDelete, fetchEvent}) => {
   const [visible, setVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
   const {user} = useSelector((state) => state.user);
   const dispatch = useDispatch()
   const trashEvent = () => {
@@ -31,6 +33,9 @@ export const Event = ({event, showBooking, showEdit, showDelete, fetchEvent}) =>
     reset();
     setVisible(false);
   }
+  const closeEditDialog = () => {
+    setShowEditDialog(false);
+  }
   return (
     <>
       <div className="w-full">
@@ -42,7 +47,7 @@ export const Event = ({event, showBooking, showEdit, showDelete, fetchEvent}) =>
                 {event.date}
               </p>
               <div className="flex items-center gap-4">
-                {showEdit && <BiSolidEdit />}
+                {showEdit && <button onClick={() => setShowEditDialog(true)} className="hover:cursor-pointer"> <BiSolidEdit /> </button>}
                 {showDelete &&<button onClick={trashEvent} className="px-4 py-1 hover:cursor-pointer"><BsTrash /></button> }
               </div>
             </div>
@@ -102,6 +107,9 @@ export const Event = ({event, showBooking, showEdit, showDelete, fetchEvent}) =>
             </div>
           </div>}
         </div>
+      </Dialog>
+      <Dialog header={`Edit ${event.title}`} visible={showEditDialog} style={{ width: '50vw' }} onHide={() => {if (!showEdit) return; setShowEditDialog(false); }}>
+        <CreateAndEditEvent selectedEvent={event} onHide={closeEditDialog}/>
       </Dialog>
     </>
   )

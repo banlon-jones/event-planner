@@ -23,9 +23,9 @@ export const deleteEvent = (id) => {
   return newEvents;
 }
 
-export const editEvent = (event) => {
+export const editMyEvent = (event) => {
   const events = JSON.parse(localStorage.getItem('events'));
-  const newEvents = events.map((eventItem) => eventItem.id === event.id? event : eventItem)
+  const newEvents = events.map((eventItem) => eventItem.id === event.id? {...eventItem, event} : eventItem)
   localStorage.setItem('events', JSON.stringify(newEvents));
   return newEvents;
 }
