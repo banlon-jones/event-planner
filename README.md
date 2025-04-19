@@ -25,7 +25,7 @@ This is a React-based Event Management Application that allows users to create, 
    ```bash
    npm run dev
    
-4. ** View the Application:
+4. **View the Application:
  Open the application in your browser at http://localhost:5173
 
 <hr>
